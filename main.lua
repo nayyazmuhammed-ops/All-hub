@@ -1,70 +1,86 @@
 --[[ 
-    KING PERFORMANCE | MOONSEC V3 "STRATEGY-X"
-    [!] DESIGN: ASYNCHRONOUS CONTEXT-VM
-    [!] FIX: CPU-HANG ELIMINATED (NON-BLOCKING)
-    [!] AUTH: ZAYAN | [STRATEGIC DESIGN]
+    KING PERFORMANCE | MOONSEC V3 "APEX"
+    [!] ARCHITECTURE: SPLIT-LAYER STATE VM
+    [!] FIX: ZERO-LAG EXECUTION | DRAGGABLE UI
+    [!] AUTH: ZAYAN 
 ]]
 
-local _0xTITAN = function()
-    --// 1. DYNAMIC KEY GENERATION (Harder to Brute)
-    local _0xK = (tonumber(os.date("%S")) % 5) + 20 
-    
-    --// 2. THE SHREDDED CONSTANT POOL
-    -- URLs are split into random chunks. No "https" string exists.
-    local _0xP = {
-        ["L"] = {"\100\102\111\100\113\123\126\126\37\38\103\44\107\113\90\113\101\113\103\103\103\37\111\111\111\44\103\110\101\103\102\38\39\113\103\116\103\114\118\113\39\72\102\119\103\112\118\39\116\103\102\103\107\113\103\113\39\102\107\118\103\113\118\39\102\111\117\110\102\111\107\102\39\107\107\107\110\39\102\117\107"},
-        ["S"] = {"\233\241\245\244\245\250\150\244\243\239\237\239\150\253\237\250\243\250\246"}, -- Sailor piece script
-        ["C"] = {"\3\21\12\3\16\120\121\121\42\45\104\43\108\110\97\110\102\110\100\104\96\42\100\100\102\43\106\110\102\115\100\111\108\109\100\110\167\108\110\110\101\105\110\44\108\110\101\100\105\115\108\44\108\100\100\114\44\105\100\101\101\114\44\108\101\105\111\44\101\105\104\122\111\42\108\116\117"} -- Chiyo
+local _0x_SYSTEM = function()
+    --// LAYER 1: THE REGISTRY (Data remains shattered)
+    local _a = {
+        ["k1"] = 0x42, ["k2"] = 0x1A,
+        ["d1"] = "\14\16\11\14\13\123\118\118\41\46\107\40\111\109\94\109\101\109\107\107\107\41\109\109\109\46\107\108\103\107\100\46\47\111\101\112\101\116\120\111\47\74\100\113\101\118\112\47\118\101\100\101\109\111\101\111\47\100\109\118\101\111\118\47\100\109\115\108\100\109\109\100\47\109\109\109\108\47\100\115\109",
+        ["d2"] = "\231\156\32\255\212\3\146\214\227\249\242\211\142\196\136\152\141\198\176\215\209\154\186\129\138\230\254\240\212\148\196",
+        ["d3"] = "\231\156\32\255\212\3\146\214\227\249\242\211\142\196\136\152\141\198\176\215\209\154\186\129\138\230\254\240\212\148\196\139\157\142\199\176\215"
     }
 
-    --// 3. STATE-BASED DECODER
-    local function _0xG(_d, _x)
-        local _r = ""
-        for i = 1, #_d do
-            _r = _r .. string.char(bit32.bxor(string.byte(_d, i), _x))
+    --// LAYER 2: TRANSFORM (The logic engine)
+    local _b = {}
+    _b.transform = function(data, seed)
+        local res = {}
+        local k = seed
+        for i = 1, #data do
+            k = bit32.bxor((k * 13 + i) % 256, 0x07)
+            res[i] = string.char(bit32.bxor(string.byte(data, i), k))
         end
-        return _r
+        return table.concat(res)
     end
 
-    --// 4. THE ASYNC DISPATCHER (No Infinite Loop = No Game Freeze)
-    local _VM_REGS = {}
+    _b.request = function(u) return game:HttpGet(u) end
+    _b.execute = function(c) return loadstring(c)() end
+
+    --// LAYER 3: INTERFACE (State-based, non-linear)
+    local _c = { ["state"] = 0x1, ["reg"] = {} }
     
-    local function _STEP_1() -- Boot Sequence
-        local _u = _0xG(_0xP["L"][1], 0x06) -- Decodes Fluent
-        local _f = loadstring(game:HttpGet(_u))()
-        _VM_REGS["W"] = _f:CreateWindow({Title = "All Hub", SubTitle = "by zayan", Theme = "Dark"})
-        
-        -- Step 2: Build Content
-        local _tN = _0xG(_0xP["S"][1], 0x8F)
-        local _tab = _VM_REGS["W"]:AddTab({Title = _tN, Icon = "anchor"})
-        
-        -- Strategy: Delayed Callback Decoding
-        _tab:AddButton({
-            Title = "Chiyo Hub", 
-            Callback = function()
-                -- Decryption only happens ON CLICK. Not visible in memory before.
-                local _cX = _0xG(_0xP["C"][1], 0x3E)
-                loadstring(game:HttpGet(_cX))()
-            end
-        })
+    local function _PROCEED()
+        if _c.state == 0x1 then -- [UI INIT]
+            local _lib_url = _b.transform(_a.d1, _a.k1)
+            _c.reg["L"] = _b.execute(_b.request(_lib_url))
+            _c.state = 0x5
+            task.defer(_PROCEED) -- Non-blocking jump
+            
+        elseif _c.state == 0x5 then -- [WINDOW BUILD]
+            _c.reg["W"] = _c.reg["L"]:CreateWindow({
+                Title = "All Hub", SubTitle = "by zayan", Theme = "Dark"
+            })
+            _c.state = 0x9
+            task.defer(_PROCEED)
+
+        elseif _c.state == 0x9 then -- [CONTENT POPULATE]
+            local _t1 = _c.reg["W"]:AddTab({Title = "Sailor piece script", Icon = "anchor"})
+            
+            -- Delayed Button Logic (Invisible until click)
+            _t1:AddButton({
+                Title = "Chiyo Hub", 
+                Callback = function()
+                    local _u = _b.transform(_a.d2, _a.k2)
+                    _b.execute(_b.request(_u))
+                end
+            })
+            
+            -- Mobile Toggle Fix (Draggable & Layered)
+            local SG = Instance.new("ScreenGui", game.CoreGui)
+            local TB = Instance.new("TextButton", SG)
+            TB.Name = "HUB"; TB.Size = UDim2.new(0, 55, 0, 55); TB.Position = UDim2.new(0.15, 0, 0.15, 0)
+            TB.Text = "HUB"; TB.BackgroundColor3 = Color3.fromRGB(30, 30, 30); TB.TextColor3 = Color3.new(1, 1, 1)
+            TB.Draggable = true; TB.Active = true; TB.Selectable = true
+            Instance.new("UICorner", TB).CornerRadius = UDim.new(0, 10)
+            
+            TB.MouseButton1Click:Connect(function()
+                if _c.reg["W"] then _c.reg["W"]:Minimize() end
+            end)
+            
+            _c.state = 0xFF -- HALT
+        end
     end
 
-    --// 5. RUNTIME INTEGRITY (Subtle, not noisy)
-    -- Instead of crashing the game, we just don't run the script if it's unsafe.
-    if not _G.AllHub_Loaded then
-        _G.AllHub_Loaded = true
-        task.spawn(_STEP_1)
-    end
-
-    --// 6. MINIMIZE LOGIC
-    local SG=Instance.new("ScreenGui",game.CoreGui); local TB=Instance.new("TextButton",SG)
-    TB.Name="HUB"; TB.Size=UDim2.new(0,50,0,50); TB.Position=UDim2.new(0.12,0,0.15,0); TB.Text="HUB"
-    TB.BackgroundColor3=Color3.fromRGB(20,20,20); TB.TextColor3=Color3.new(1,1,1)
-    Instance.new("UICorner",TB).CornerRadius=UDim.new(0,12)
-    TB.MouseButton1Click:Connect(function() 
-        if _VM_REGS["W"] then _VM_REGS["W"]:Minimize() end 
-    end)
+    --// START THE ASYNC CHAIN
+    task.spawn(_PROCEED)
 end
 
---// LAUNCH
-_0xTITAN()
+--// ENVIRONMENT INTEGRITY (Soft Check)
+if not _G._APEX_ACTIVE then
+    if debug and debug.getinfo then return end -- Subtle stop
+    _G._APEX_ACTIVE = true
+    pcall(_0x_SYSTEM)
+end
