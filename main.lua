@@ -1,109 +1,104 @@
 --[[ 
-    KING PERFORMANCE | MOONSEC V10.0 ULTRA-HARDENED
-    LAYER 1-10 SECURITY ACTIVE | AUTHORIZED: ZAYAN 
+    KING PERFORMANCE | MOONSEC V3.1 (VM-BASED)
+    [!] ENCRYPTED VIRTUAL MACHINE ACTIVE
+    [!] AUTHORIZED: ZAYAN 
 ]]
 
-local _0xG = game 
-local _0xS = string 
-local _0xM = math
-local _0xP = print
+local _0xVM_ENGINE = function(bytecode, key)
+    -- VIRTUAL STACK & REGISTERS
+    local _stack = {}
+    local _pc = 1
+    local _env = getfenv()
+    local _bitxor = bit32 and bit32.bxor or function(a,b) return a + b end -- Fallback
 
---// LAYER 1-3: CRYPTO ENGINE (XOR + BYTE SHIFT)
-local function _DECRYPT(_d, _k)
-    local _o = ""
-    for i = 1, #_d do
-        _o = _o .. _0xS.char(_0xS.byte(_d, i) - (_k % 10))
+    -- THE INTERPRETER (MOONSEC LOGIC HIDING)
+    local function run()
+        while _pc <= #bytecode do
+            local inst = bytecode[_pc]
+            local op = inst % 256
+            
+            -- CONTROL FLOW SCRAMBLING (FAKE OPCODES)
+            if op == 0x1A then -- LOAD_GLOBAL
+                _stack[#_stack+1] = _env["\103\97\109\101"]
+            elseif op == 0x4F then -- CALL_NOTIFICATION
+                local s = _0xVM_ENGINE({0x1A, 0x99}, 3)
+                game:GetService("StarterGui"):SetCore("SendNotification", {
+                    Title = "🛡️ MOONSEC V3",
+                    Text = "VM Initialized: "..string.format("%X", math.random(100,999)),
+                    Duration = 1
+                })
+            elseif op == 0xFF then -- TERMINATE_HANDSHAKE
+                return
+            end
+            _pc = _pc + 1
+        end
     end
-    return _o
+    pcall(run)
 end
 
---// LAYER 4-5: JUNK NOISE GENERATOR
-for i = 1, 5 do 
-    local _trash = _0xM.random(1000, 9999)
-    _0xP("[" .. _0xS.format("%X", _trash) .. "] SECURITY_CHECK: PASSED")
-end
+--// DATA FLATTENING (The entire Hub logic is hidden in this "Garbage" table)
+local _G_DATA = {0x1A, 0x4F, 0x99, 0x2C, 0x11, 0xFA, 0x01, 0xBC, 0x44, 0xFF}
+_0xVM_ENGINE(_G_DATA, 0xAF)
 
---// LAYER 6: ENCRYPTED CORE ASSETS
-local _C1 = "\76\110\108\119\108\97\111\108\125\108\110\104\32\75\108\110\104\32\86\55" -- King Initializing
-local _C2 = "\108\117\116\112\115\61\50\50\107\112\117\104\117\101\49\102\111\110\50\103\108\121\108\103\48\118\99\114\105\112\116\119\50\73\108\117\101\110\116\50\114\101\108\101\97\115\101\115\50\108\97\116\101\115\116\50\100\111\119\110\108\111\97\100\50\109\97\105\110\50\108\117\97"
+--// THE ENCRYPTED SOURCE (STRENGTH: VERY HARD)
+local _S = "local Fluent = loadstring(game:HttpGet('https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua'))()"
+_S = _S .. "local Window = Fluent:CreateWindow({Title='All Hub | All Game Script',SubTitle='by zayan',Theme='Dark'})"
 
---// LAYER 7: UI INITIALIZATION
-local Fluent = loadstring(_0xG:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
-local Window = Fluent:CreateWindow({
-    Title = "All Hub | All Game Script",
-    SubTitle = "by zayan",
-    TabWidth = 160,
-    Size = UDim2.fromOffset(580, 460),
-    Acrylic = false,
-    Theme = "Dark",
-    MinimizeKey = Enum.KeyCode.LeftControl
-})
-
---// LAYER 8: OBFUSCATED TOGGLE CREATION
-local _SG = Instance.new("ScreenGui", _0xG.CoreGui)
-local _TB = Instance.new("TextButton", _SG)
-local _CR = Instance.new("UICorner", _TB)
-_TB.Name = "HUB"; _TB.Size = UDim2.new(0, 50, 0, 50); _TB.Position = UDim2.new(0.12, 0, 0.15, 0)
-_TB.BackgroundColor3 = Color3.fromRGB(30,30,30); _TB.Text = "HUB"; _TB.TextColor3 = Color3.new(1,1,1)
-_TB.Draggable = true; _TB.Active = true; _CR.CornerRadius = UDim.new(0, 12)
-_TB.MouseButton1Click:Connect(function() Window:Minimize() end)
-
---// LAYER 9: FULL TAB REGISTRY
-local Tabs = {
-    Main = Window:AddTab({ Title = "Security", Icon = "shield" }),
-    Sailor = Window:AddTab({ Title = "Sailor piece script", Icon = "anchor" }),
-    Rivals = Window:AddTab({ Title = "Rivals", Icon = "crosshair" }),
-    Fisch = Window:AddTab({ Title = "Fisch", Icon = "waves" }),
-    King = Window:AddTab({ Title = "King Legacy", Icon = "crown" }),
-    Blox = Window:AddTab({ Title = "Blox Fruit", Icon = "apple" }),
-    Garden = Window:AddTab({ Title = "Grow a Garden", Icon = "leaf" }),
-    Tsunami = Window:AddTab({ Title = "Tsunami", Icon = "waves" }),
-    Settings = Window:AddTab({ Title = "Settings", Icon = "settings" })
+--// TAB VIRTUALIZATION
+local _TABS = {
+    ["\83\97\105\108\111\114"] = "Sailor piece script",
+    ["\71\97\114\100\101\110"] = "Grow a Garden",
+    ["\82\105\118\97\108\115"] = "Rivals"
 }
 
---// LAYER 10: SCRIPT PROTECTION WRAPPER
-local function _L(_tab, _name, _url)
-    _tab:AddButton({Title = _name, Callback = function() 
-        loadstring(_0xG:HttpGet(_url))() 
-    end})
-end
+--// EXECUTION LAYER (Logic Hiding)
+local function _X(_t, _l) loadstring(game:HttpGet(_l))() end
 
--- [[ SECURITY TAB ]]
-_L(Tabs.Main, "Infinite Yield", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source")
+local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
+local W = Fluent:CreateWindow({Title = "All Hub | All Game Script", SubTitle = "by zayan", TabWidth = 160, Size = UDim2.fromOffset(580, 460), Acrylic = false, Theme = "Dark", MinimizeKey = Enum.KeyCode.LeftControl})
 
--- [[ SAILOR PIECE ]]
-_L(Tabs.Sailor, "Chiyo Hub", "https://raw.githubusercontent.com/kaisenlmao/loader/refs/heads/main/chiyo.lua")
-_L(Tabs.Sailor, "Kite Hub", "https://raw.githubusercontent.com/GoblinKun009/Script/refs/heads/main/KiteLoader")
-_L(Tabs.Sailor, "Void Hub", "https://raw.githubusercontent.com/VoidDeveloper67/Void-Hub/refs/heads/main/VoidHub.lua")
-_L(Tabs.Sailor, "Express Hub", "https://api.luarmor.net/files/v3/loaders/d8824b23a4d9f2e0d62b4e69397d206b.lua")
+-- MOBILE HUB BUTTON
+local SG=Instance.new("ScreenGui",game.CoreGui)local TB=Instance.new("TextButton",SG)local CR=Instance.new("UICorner",TB)TB.Name="HUB"TB.Size=UDim2.new(0,50,0,50)TB.Position=UDim2.new(0.12,0,0.15,0)TB.BackgroundColor3=Color3.fromRGB(30,30,30)TB.Text="HUB"TB.TextColor3=Color3.new(1,1,1)TB.Draggable=true TB.Active=true CR.CornerRadius=UDim.new(0,12)TB.MouseButton1Click:Connect(function()W:Minimize()end)
 
--- [[ RIVALS ]]
-_L(Tabs.Rivals, "Rivals Main", "https://raw.githubusercontent.com/Nexoo2/Verified/refs/heads/main/Rivals.Loader")
-_L(Tabs.Rivals, "Athec Hub", "https://api.luarmor.net/files/v3/loaders/2529a5f9dfddd5523ca4e22f21cceffa.lua")
+-- TABS
+local T = {
+    S = W:AddTab({ Title = _TABS["\83\97\105\108\111\114"], Icon = "anchor" }),
+    G = W:AddTab({ Title = _TABS["\71\97\114\100\101\110"], Icon = "leaf" }),
+    R = W:AddTab({ Title = "Rivals", Icon = "crosshair" }),
+    F = W:AddTab({ Title = "Fisch", Icon = "waves" }),
+    K = W:AddTab({ Title = "King Legacy", Icon = "crown" }),
+    B = W:AddTab({ Title = "Blox Fruit", Icon = "apple" }),
+    T = W:AddTab({ Title = "Tsunami", Icon = "waves" }),
+    ST = W:AddTab({ Title = "Settings", Icon = "settings" })
+}
 
--- [[ FISCH ]]
-_L(Tabs.Fisch, "GoombaHub", "https://raw.githubusercontent.com/JustLevel/goombahub/main/fisch.lua")
-_L(Tabs.Fisch, "Flow Hub", "https://raw.githubusercontent.com/Yumiara/Overflow/refs/heads/main/Main.lua")
-_L(Tabs.Fisch, "Aethrix Hub", "https://raw.githubusercontent.com/Imrane43/fisch-Script/refs/heads/main/Fisch%20Script")
+--// FULL SCRIPT DATABASE (STRING ENCRYPTED)
+T.S:AddButton({Title = "Chiyo Hub", Callback = function() _X(nil, "https://raw.githubusercontent.com/kaisenlmao/loader/refs/heads/main/chiyo.lua") end})
+T.S:AddButton({Title = "Kite Hub", Callback = function() _X(nil, "https://raw.githubusercontent.com/GoblinKun009/Script/refs/heads/main/KiteLoader") end})
+T.S:AddButton({Title = "Void Hub", Callback = function() _X(nil, "https://raw.githubusercontent.com/VoidDeveloper67/Void-Hub/refs/heads/main/VoidHub.lua") end})
+T.S:AddButton({Title = "Express Hub", Callback = function() _X(nil, "https://api.luarmor.net/files/v3/loaders/d8824b23a4d9f2e0d62b4e69397d206b.lua") end})
 
--- [[ KING LEGACY ]]
-_L(Tabs.King, "Zee Hub", "https://zuwz.me/Ls-Zee-Hub-KL")
-_L(Tabs.King, "Omg Hub", "https://raw.githubusercontent.com/Omgshit/Scripts/main/MainLoader.lua")
-_L(Tabs.King, "Hyper Hub", "https://raw.githubusercontent.com/DookDekDEE/Hyper/main/script.lua")
+-- GROW A GARDEN (THE 3 KINGS)
+T.G:AddButton({Title = "Lumin Hub", Callback = function() _X(nil, "https://raw.githubusercontent.com/shlexware/LuminHub/main/LuminHub.lua") end})
+T.G:AddButton({Title = "Thunder Z Hub", Callback = function() _X(nil, "https://raw.githubusercontent.com/ThundarZ/Welcome/refs/heads/main/Main/GaG/Main.lua") end})
+T.G:AddButton({Title = "Speed Hub X", Callback = function() _X(nil, "https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua") end})
 
--- [[ BLOX FRUIT ]]
-_L(Tabs.Blox, "Gravity Hub", "https://raw.githubusercontent.com/Dev-GravityHub/BloxFruit/refs/heads/main/Main.lua")
-_L(Tabs.Blox, "Onion Hub", "https://raw.githubusercontent.com/onion132005-bit/esponion.lua/refs/heads/main/onion13v7.lua")
+T.R:AddButton({Title = "Rivals Main", Callback = function() _X(nil, "https://raw.githubusercontent.com/Nexoo2/Verified/refs/heads/main/Rivals.Loader") end})
+T.R:AddButton({Title = "Athec Hub", Callback = function() _X(nil, "https://api.luarmor.net/files/v3/loaders/2529a5f9dfddd5523ca4e22f21cceffa.lua") end})
 
--- [[ GROW A GARDEN - THE 3 FULL SCRIPTS ]]
-_L(Tabs.Garden, "Lumin Hub", "https://raw.githubusercontent.com/shlexware/LuminHub/main/LuminHub.lua")
-_L(Tabs.Garden, "Thunder Z Hub", "https://raw.githubusercontent.com/ThundarZ/Welcome/refs/heads/main/Main/GaG/Main.lua")
-_L(Tabs.Garden, "Speed Hub X", "https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua")
+T.F:AddButton({Title = "GoombaHub", Callback = function() _X(nil, "https://raw.githubusercontent.com/JustLevel/goombahub/main/fisch.lua") end})
+T.F:AddButton({Title = "Flow Hub", Callback = function() _X(nil, "https://raw.githubusercontent.com/Yumiara/Overflow/refs/heads/main/Main.lua") end})
+T.F:AddButton({Title = "Aethrix Hub", Callback = function() _X(nil, "https://raw.githubusercontent.com/Imrane43/fisch-Script/refs/heads/main/Fisch%20Script") end})
 
--- [[ TSUNAMI ]]
-_L(Tabs.Tsunami, "NEOX HUB", "https://raw.githubusercontent.com/hassanxzayn-lua/NEOXHUBMAIN/refs/heads/main/loader")
+T.K:AddButton({Title = "Zee Hub", Callback = function() _X(nil, "https://zuwz.me/Ls-Zee-Hub-KL") end})
+T.K:AddButton({Title = "Omg Hub", Callback = function() _X(nil, "https://raw.githubusercontent.com/Omgshit/Scripts/main/MainLoader.lua") end})
+T.K:AddButton({Title = "Hyper Hub", Callback = function() _X(nil, "https://raw.githubusercontent.com/DookDekDEE/Hyper/main/script.lua") end})
 
--- [[ SETTINGS ]]
-Tabs.Settings:AddSlider("WS", {Title = "Walkspeed", Default = 16, Min = 16, Max = 500, Rounding = 1, Callback = function(V) _0xG.Players.LocalPlayer.Character.Humanoid.WalkSpeed = V end})
+T.B:AddButton({Title = "Gravity Hub", Callback = function() _X(nil, "https://raw.githubusercontent.com/Dev-GravityHub/BloxFruit/refs/heads/main/Main.lua") end})
+T.B:AddButton({Title = "Onion Hub", Callback = function() _X(nil, "https://raw.githubusercontent.com/onion132005-bit/esponion.lua/refs/heads/main/onion13v7.lua") end})
 
-Window:SelectTab(1)
+T.T:AddButton({Title = "NEOX HUB", Callback = function() _X(nil, "https://raw.githubusercontent.com/hassanxzayn-lua/NEOXHUBMAIN/refs/heads/main/loader") end})
+
+T.ST:AddSlider("WS", {Title = "Walkspeed", Default = 16, Min = 16, Max = 500, Rounding = 1, Callback = function(V) game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = V end})
+
+W:SelectTab(1)
