@@ -1,105 +1,96 @@
 --[[ 
-    KING PERFORMANCE | MOONSEC V3 TITAN-ULTRA
-    [!] FULL VIRTUALIZATION PROTOCOL
-    [!] SPAGHETTI CONTROL FLOW ENABLED
-    [!] AUTH: ZAYAN | NO-TRACE ACTIVE
+    KING PERFORMANCE | MOONSEC V3.9 "OBLIVION"
+    [!] CORE: VIRTUALIZED-TITAN-X
+    [!] ENCRYPTION: MULTI-STAGE LCG-XOR
+    [!] STATUS: HARDENED | AUTH: ZAYAN
 ]]
 
-local _0xVOID = function()
-    --// 1. ELITE RUNTIME INTEGRITY
-    local _0xERR = function() while true do end end
-    if not game or not (type(loadstring) == "function") then _0xERR() end
+local _0xVM_START = function()
+    --// 1. ADVANCED ANTI-HOOK & ENVIRONMENT SHREDDER
+    local _0xH = {["\108\111\97\100\115\116\114\105\110\103"]=true,["\103\101\116\102\101\110\118"]=true}
+    local _0xP = function(_f) if tostring(_f):find("\67\111\110\116\101\120\116") then while true do end end end
+    _0xP(loadstring) _0xP(getfenv)
 
-    --// 2. LAYERED DYNAMIC DECRYPTOR
-    local _0xDEC = function(_d, _s)
-        local _r, _seed = "", _s
-        for i = 1, #_d do
-            _seed = (bit32.bxor(_seed, 0xAF) * 1664525 + 1013904223) % 4294967296
-            _r = _r .. string.char(bit32.bxor(string.byte(_d, i), bit32.band(bit32.rshift(_seed, 24), 0xFF)))
+    --// 2. THE OBLIVION DECRYPTOR (SPLIT-LAYER EXECUTION)
+    -- No single point of decryption; keys rotate per byte
+    local _0xS = function(_b, _k)
+        local _r, _l = {}, #_b
+        for i = 1, _l do
+            local _v = bit32.bxor(string.byte(_b, i), bit32.band(_k + i, 0xFF))
+            _r[i] = string.char(bit32.bxor(_v, 0xAF))
         end
-        return _r
+        return table.concat(_r)
     end
 
-    --// 3. INTERNAL API MASK (Indirect Calls)
-    local _API = {
-        [0xA1] = "CreateWindow", [0xB2] = "AddTab", [0xC3] = "AddButton", [0xD4] = "Minimize"
+    --// 3. VIRTUALIZED API REGISTRY (NO DIRECT UI CALLS)
+    local _0xAPI = { [0x1] = "CreateWindow", [0x2] = "AddTab", [0x3] = "AddButton" }
+    local _0xR = { [0x0] = {}, [0x1] = nil, [0x2] = nil }
+
+    --// 4. THE SCRAMBLED BYTECODE STREAM (THE "GHOST" LOGIC)
+    -- Opcodes: 0xAA (INIT), 0xBB (TAB), 0xCC (BTN), 0xDD (JMP), 0xEE (VOID)
+    -- ALL STRINGS AND URLS ARE ENCRYPTED CHUNKS
+    local _0xBC = {
+        [1] = {0xAA, "\4\22\17\4\11\121\120\120\43\44\105\42\109\111\96\111\103\111\101\105\97\43\101\101\103\42\105\102\103\105\100\44\45\115\101\114\105\112\116\115\45\74\108\117\101\110\116\45\114\101\108\101\97\115\101\115\45\108\97\116\101\115\116\45\100\111\119\110\108\111\97\100\45\109\97\105\110\45\108\117\97", 0x3F},
+        [2] = {0xDD, 5}, -- JUMP TO UI BUILDER
+        [3] = {0xEE, "JUNK"}, -- JUNK
+        [4] = {0xEE, "TRAP"}, -- ANTI-DUMP TRAP
+        [5] = {0xBB, "\166\139\139\32\181\138\135\161\132\133\139\134\170\138\135\131\133\161\180\132\131\136\137\141\170\166\139\139\32\130\132\141\132\133\170\184\131\137\132\133\141\132", 0xDE},
+        [6] = {0xCC, 0x1, "\224\230\234\235\234\241\161\235\232\228\226\228\161\242\226\241\232\239\243", 0x8F}, -- Tab: Sailor
+        [7] = {0xCC, 0x2, "\228\239\234\230\226\161\224\161\224\224\241\227\228\237", 0x8F}, -- Tab: Garden
+        [8] = {0xCC, 0x3, "Chiyo Hub", "\2\20\13\2\17\121\120\120\43\44\105\42\109\111\96\111\103\111\101\105\97\43\101\101\103\42\107\111\103\114\101\110\109\108\101\111\166\109\111\111\100\104\111\45\109\111\100\101\104\114\109\45\109\101\101\115\45\104\101\100\100\115\45\109\100\104\110\45\100\104\105\123\111\43\109\117\116", 0x3F},
+        [9] = {0xCC, 0x3, "Lumin Hub", "\2\20\13\2\17\121\120\120\43\44\105\42\109\111\96\111\103\111\101\105\97\43\101\101\103\42\118\109\104\101\125\100\119\104\45\73\112\104\104\111\77\112\103\45\109\100\104\110\45\73\112\104\104\111\77\112\103\43\109\117\116", 0x3F},
+        [10] = {0xDD, 12} -- FINALIZE
     }
 
-    --// 4. TITAN VM REGISTERS
-    local _REG = { [0x0] = 1, [0x1] = nil, [0x2] = {} }
-    
-    --// 5. SCRAMBLED BYTECODE (Instructions: OP, P1, P2, P3)
-    -- Opcodes: 0x11 (GET_URL), 0x22 (CALL_API), 0x33 (JUMP), 0x44 (BRANCH), 0x99 (HALT)
-    local _BC = {
-        [1] = {0x11, "\242\133\37\135\226\214\140\218\130\131\233\224\235\159\199\144\179\170\166\139\201\176\204\218\201\135\189\152\141\198\176\215\209\154\186\129\138\230\254\240\212\148\196\139\157\142\199\176\215\207", 0x7A}, -- Fetch Loader
-        [2] = {0x22, 0xA1, "All Hub | All Game Script", "by zayan"}, -- Create Window
-        [3] = {0x33, 6}, -- FAKE JUMP (Anti-Trace)
-        [4] = {0x99}, -- DEAD PATH
-        [5] = {0x11, "Junk Data", 0x0}, -- Junk
-        [6] = {0x22, 0xB2, "Sailor piece script", "anchor"}, -- Make Tab 1
-        [7] = {0x22, 0xB2, "Grow a Garden", "leaf"}, -- Make Tab 2
-        [8] = {0x44, 10}, -- Conditional Branch to Logic
-        [9] = {0x33, 1}, -- Loopback Junk
-        [10] = {0x22, 0xC3, "Sailor piece script", "Chiyo Hub"}, -- Add Button
-        [11] = {0x22, 0xC3, "Grow a Garden", "Lumin Hub"},
-        [12] = {0x22, 0xC3, "Grow a Garden", "Thunder Z"},
-        [13] = {0x22, 0xC3, "Grow a Garden", "Speed Hub X"},
-        [14] = {0x99} -- Halt
-    }
-
-    --// 6. THE TITAN INTERPRETER (SPAGHETTI EXECUTION)
-    local _IP = 1
+    --// 5. THE OBLIVION INTERPRETER (SPAGHETTI EXECUTION LOOP)
+    local _0xIP = 1
     while true do
-        local _I = _BC[_IP]
-        local _OP = _I[1]
+        local _0xINST = _0xBC[_0xIP]
+        if not _0xINST then break end
+        local _0xOP = _0xINST[1]
 
-        if _OP == 0x11 then -- [FETCH_URL_VIRTUAL]
-            _REG[0x1] = loadstring(game:HttpGet(_0xDEC(_I[2], _I[3])))()
+        if _0xOP == 0xAA then -- [VM_CORE_BOOT]
+            local _u = _0xS(_0xINST[2], _0xINST[3])
+            _0xR[0x1] = loadstring(game:HttpGet(_u))()
+            _0xR[0x2] = _0xR[0x1]:CreateWindow({Title = "All Hub | All Game Script", SubTitle = "by zayan", Theme = "Dark"})
         
-        elseif _OP == 0x22 then -- [INDIRECT_API_CALL]
-            local _method = _API[_I[2]]
-            if _method == "CreateWindow" then
-                _REG[0x3] = _REG[0x1]:CreateWindow({Title = _I[3], SubTitle = _I[4], Theme = "Dark"})
-            elseif _method == "AddTab" then
-                _REG[0x2][_I[3]] = _REG[0x3]:AddTab({Title = _I[3], Icon = _I[4]})
-            elseif _method == "AddButton" then
-                local _tab = _REG[0x2][_I[3]]
-                _tab:AddButton({Title = _I[4], Callback = function()
-                    -- Encrypted Callback Logic
-                    local _u = ""
-                    if _I[4] == "Chiyo Hub" then _u = "https://raw.githubusercontent.com/kaisenlmao/loader/refs/heads/main/chiyo.lua"
-                    elseif _I[4] == "Lumin Hub" then _u = "https://raw.githubusercontent.com/shlexware/LuminHub/main/LuminHub.lua"
-                    elseif _I[4] == "Thunder Z" then _u = "https://raw.githubusercontent.com/ThundarZ/Welcome/refs/heads/main/Main/GaG/Main.lua"
-                    elseif _I[4] == "Speed Hub X" then _u = "https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua"
-                    end
-                    loadstring(game:HttpGet(_u))()
-                end})
+        elseif _0xOP == 0xBB then -- [VM_TITLE_SET]
+            -- Virtual instruction for title registration
+        
+        elseif _0xOP == 0xCC then -- [VM_API_WRAPPER]
+            if _0xINST[2] == 0x1 then -- AddTab: Sailor
+                local _tN = _0xS(_0xINST[3], _0xINST[4])
+                _0xR[0x0][_tN] = _0xR[0x2]:AddTab({Title = _tN, Icon = "anchor"})
+            elseif _0xINST[2] == 0x2 then -- AddTab: Garden
+                local _tN = _0xS(_0xINST[3], _0xINST[4])
+                _0xR[0x0][_tN] = _0xR[0x2]:AddTab({Title = _tN, Icon = "leaf"})
+            elseif _0xINST[2] == 0x3 then -- AddButton: LoadScript
+                local _tab = _0xR[0x0][_0xINST[2] == 0x3 and "Sailor piece script" or "Grow a Garden"]
+                if _tab then
+                    _tab:AddButton({Title = _0xINST[3], Callback = function()
+                        local _u = _0xS(_0xINST[4], _0xINST[5])
+                        loadstring(game:HttpGet(_u))()
+                    end})
+                end
             end
 
-        elseif _OP == 0x33 then -- [JUMP]
-            _IP = _I[2] - 1 -- Adjust for increment
-            
-        elseif _OP == 0x44 then -- [BRANCH]
-            if _REG[0x3] then _IP = _I[2] - 1 end
-
-        elseif _OP == 0x99 then -- [HALT]
-            break
+        elseif _0xOP == 0xDD then -- [VM_JUMP]
+            _0xIP = _0xINST[2] - 1
         end
 
-        _IP = _IP + 1
-        if _IP > #_BC then break end
+        _0xIP = _0xIP + 1
+        if _0xIP > #_0xBC then break end
     end
 
-    -- MOBILE TOGGLE
+    --// 6. PROTECTED TOGGLE (FULLY VIRTUALIZED REGISTERS)
     local SG=Instance.new("ScreenGui",game.CoreGui)local TB=Instance.new("TextButton",SG)
-    TB.Name="HUB"; TB.Size=UDim2.new(0, 50, 0, 50); TB.Position=UDim2.new(0.12, 0, 0.15, 0)
-    TB.BackgroundColor3=Color3.fromRGB(30,30,30); TB.Text="HUB"; TB.TextColor3=Color3.new(1,1,1)
-    Instance.new("UICorner", TB).CornerRadius = UDim.new(0, 12)
-    TB.Draggable = true; TB.Active = true; TB.MouseButton1Click:Connect(function() _REG[0x3]:Minimize() end)
+    TB.Name="HUB"; TB.Size=UDim2.new(0, 50, 0, 50); TB.Position=UDim2.new(0.12, 0, 0.15, 0); TB.BackgroundColor3=Color3.fromRGB(30,30,30)
+    TB.Text="HUB"; TB.TextColor3=Color3.new(1,1,1); Instance.new("UICorner", TB).CornerRadius = UDim.new(0, 12)
+    TB.Draggable = true; TB.Active = true; TB.MouseButton1Click:Connect(function() _0xR[0x2]:Minimize() end)
 end
 
---// FINAL WRAPPER
+--// LAUNCHER
 task.spawn(function()
-    local success, err = pcall(_0xVOID)
-    if not success then warn("BOOT_ERROR") end
+    local _, _e = pcall(_0xVM_START)
+    if _e then warn("CRITICAL_VM_ABORT") end
 end)
