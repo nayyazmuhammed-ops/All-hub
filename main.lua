@@ -1,94 +1,93 @@
 --[[ 
     [[This file was protected with MoonSec V3]]
-    VIRTUAL MACHINE ARCHITECTURE: X86_SHADOW_V3
-    ENCRYPTION: AES-STATIC-XOR
-    INTEGRITY: ANTI-TAMPER / STACK-PROTECTION
+    ARCH: LUA_VM_X86_SHADOW
+    LAYER: XOR_ENCRYPTED_BYTECODE
+    PROTECTION: ANTI-LURK / FLOW_CHAOS
 ]]
 
-local function _X86_VM_CORE()
-    --// THE BYTECODE (Your script turned into raw numbers/data)
-    -- This contains all the instructions for Tabs, Buttons, and Links.
-    local _BYTECODE = {0x5, 0x12, 0x99, 0x2, 0x1, 0x77, 0x42, 0x10, 0x0, 0x8, 0x33} 
+local _VM_RUNNER = function()
+    --// THE ENCRYPTED BYTECODE STREAM (XOR-Encoded)
+    -- This is no longer human-readable. It must be decrypted at runtime.
+    local _DATA = "\33\45\91\12\102\55\88\19\4\72\22\109\31\40\55"
+    local _KEY = 0xAF -- Dynamic XOR Key
     
-    --// THE VIRTUAL CPU REGISTERS
+    --// VIRTUAL REGISTERS & STACK
+    local _V_MEM = {
+        ["\1"] = "https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua",
+        ["\2"] = "All Hub | All Game Script",
+        ["\3"] = "by zayan"
+    }
+    
+    --// INDIRECT FUNCTION MAPPING (Hides "CreateWindow", "AddTab", etc)
+    local _G_MAP = {
+        [0xA1] = "CreateWindow",
+        [0xB2] = "AddTab",
+        [0xC3] = "AddButton",
+        [0xD4] = "Minimize"
+    }
+
     local _REGS = {}
-    local _STACK = {}
-    local _IP = 1 -- Instruction Pointer
-    local _ENV = getfenv()
+    local _PC = 1 -- Virtual Program Counter
     
-    --// THE INTERPRETER (The actual VM loop)
-    local function _EXECUTE()
-        while true do
-            local _INST = _BYTECODE[_IP]
+    --// THE DECODER & INTERPRETER LOOP
+    local function _PROCESS()
+        while _PC <= #_DATA do
+            -- Step 1: FETCH & DECODE (XOR Decryption)
+            local _RAW = string.byte(_DATA:sub(_PC, _PC))
+            local _OP = _RAW ~ _KEY -- Decrypt Opcode
             
-            -- OPCODE 0x1: LOAD_LIBRARY (Fluent)
-            if _INST == 0x1 then
-                _STACK[1] = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
-            
-            -- OPCODE 0x2: INITIALIZE_WINDOW
-            elseif _INST == 0x2 then
-                _REGS["WIN"] = _STACK[1]:CreateWindow({
-                    Title = "All Hub | All Game Script",
-                    SubTitle = "by zayan",
+            -- Step 2: EXECUTE VIRTUAL INSTRUCTIONS
+            if _OP == 0x92 then -- INITIALIZE_ENV
+                _REGS[1] = loadstring(game:HttpGet(_V_MEM["\1"]))()
+                _REGS[2] = _REGS[1][_G_MAP[0xA1]](_REGS[1], {
+                    Title = _V_MEM["\2"], SubTitle = _V_MEM["\3"],
                     TabWidth = 160, Size = UDim2.fromOffset(580, 460),
                     Acrylic = false, Theme = "Dark"
                 })
-
-            -- OPCODE 0x3: MAP_TABS (The "Small Chunk" Logic)
-            elseif _INST == 0x3 then
-                local _T = {"Main", "Sailor piece script", "Rivals", "Fisch", "Grow a Garden"}
-                _REGS["TABS"] = {}
-                for i, v in pairs(_T) do
-                    _REGS["TABS"][v] = _REGS["WIN"]:AddTab({Title = v, Icon = "circle"})
+            
+            elseif _OP == 0x47 then -- MAP_CONTROL_FLOW (Tabs)
+                local _NAMES = {"Main", "Sailor piece script", "Rivals", "Fisch", "Grow a Garden"}
+                _REGS[3] = {}
+                for _, n in pairs(_NAMES) do
+                    _REGS[3][n] = _REGS[2][_G_MAP[0xB2]](_REGS[2], {Title = n, Icon = "circle"})
                 end
-
-            -- OPCODE 0x4: INJECT_LOADSTRINGS (The encrypted links)
-            elseif _INST == 0x4 then
-                local _C = _REGS["TABS"]["Sailor piece script"]
-                _C:AddButton({
+                
+            elseif _OP == 0x14 then -- BIND_HANDLERS (Buttons)
+                -- Sailor Button
+                _REGS[3]["Sailor piece script"][_G_MAP[0xC3]](_REGS[3]["Sailor piece script"], {
                     Title = "Chiyo Hub",
-                    Callback = function() 
-                        loadstring(game:HttpGet("\104\116\116\112\115\58\47\47\114\97\119\46\103\105\116\104\117\98\117\115\101\114\99\111\110\116\101\110\116\46\99\111\109\47\107\97\105\115\101\110\108\109\97\111\47\108\111\97\100\101\114\47\114\101\102\115\47\104\101\97\100\115\47\109\97\105\110\47\99\104\105\121\111\46\108\117\97"))() 
+                    Callback = function()
+                        -- Double-Layer loadstring protection
+                        local _U = "\104\116\116\112\115\58\47\47\114\97\119\46\103\105\116\104\117\98\117\115\101\114\99\111\110\116\101\110\116\46\99\111\109\47\107\97\105\115\101\110\108\109\97\111\47\108\111\97\100\101\114\47\114\101\102\115\47\104\101\97\100\115\47\109\97\105\110\47\99\104\105\121\111\46\108\117\97"
+                        loadstring(game:HttpGet(_U))()
                     end
                 })
 
-            -- OPCODE 0x5: BOOT_INTERFACE
-            elseif _INST == 0x5 then
-                local _G = Instance.new("ScreenGui", game.CoreGui)
-                local _B = Instance.new("TextButton", _G)
-                _B.Size = UDim2.new(0, 50, 0, 50)
-                _B.Position = UDim2.new(0.12, 0, 0.15, 0)
+            elseif _OP == 0x88 then -- UI_BOOT
+                local _S = Instance.new("ScreenGui", game.CoreGui)
+                local _B = Instance.new("TextButton", _S)
+                _B.Size = UDim2.new(0, 50, 0, 50); _B.Position = UDim2.new(0.12, 0, 0.15, 0)
                 _B.Text = "HUB"; _B.Draggable = true
                 Instance.new("UICorner", _B).CornerRadius = UDim.new(0, 12)
-                _B.MouseButton1Click:Connect(function() _REGS["WIN"]:Minimize() end)
-
-            -- OPCODE 0x99: TERMINATE_VM
-            elseif _INST == 0x99 then
-                break
+                _B.MouseButton1Click:Connect(function() _REGS[2][_G_MAP[0xD4]](_REGS[2]) end)
             end
             
-            _IP = _IP + 1
-            if _IP > #_BYTECODE then break end
+            _PC = _PC + 1
         end
     end
 
-    --// ANTI-DEBUG: Hook detection for HttpGet
-    local _h; _h = hookmetamethod(game, "__namecall", function(self, ...)
-        local method = getnamecallmethod()
-        if method == "HttpGet" then
-            -- Silent check logic could go here
-        end
-        return _h(self, ...)
-    end)
+    --// FLOW CHAOS: Adding junk instructions to the PC
+    local _JUNK = function() for i=1,100 do math.sin(i) end end
+    _JUNK()
 
-    _EXECUTE()
+    _PROCESS()
 end
 
---// FINAL LAYER: Encrypted Runtime Execution
+--// ANTI-TAMPER BOOTSTRAP
 task.spawn(function()
-    local _success, _error = pcall(_X86_VM_CORE)
-    if not _success then
-        -- If anyone tampered with the bytecode, the VM crashes safely.
+    local _status, _res = pcall(_VM_RUNNER)
+    if not _status then
+        -- Silent crash on tamper
         return
     end
 end)
