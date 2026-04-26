@@ -1,11 +1,33 @@
--- simple working loader
+--// SCRIPT LINK
+local SCRIPT_URL = "https://raw.githubusercontent.com/nayyazmuhammed-ops/All-hub/main/main.lua"
 
-local KEY = "ZAYYAN123"
-local URL = "https://raw.githubusercontent.com/nayyazmuhammed-ops/All-hub/main/main.lua"
+--// KEY SYSTEM
+local KEYS = {
+    ["ZAYYAN123"] = {expires = 9999999999}, -- permanent
+    ["FRIEND"] = {expires = os.time() + 86400}, -- 1 day
+}
 
-if getgenv().script_key ~= KEY then
-    return warn("Wrong key")
+--// GET KEY
+local key = getgenv().script_key
+
+--// CHECK KEY
+local data = KEYS[key]
+
+if not data then
+    return warn("Invalid key")
 end
 
-local data = game:HttpGet(URL)
-loadstring(data)()
+if os.time() > data.expires then
+    return warn("Key expired")
+end
+
+--// LOAD SCRIPT
+local success, script = pcall(function()
+    return game:HttpGet(SCRIPT_URL)
+end)
+
+if success then
+    loadstring(script)()
+else
+    warn("Failed to load script")
+end
