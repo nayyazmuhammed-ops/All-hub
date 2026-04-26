@@ -1,76 +1,90 @@
 --[[ 
-    [[PROTECTED BY MOONSEC V3]]
-    ENGINE: DELTA_OPTIMIZED_VM
+    [[OFFICIAL MOONSEC V3 ARCHITECTURE]]
+    CORE: OMNI_VM_REVOLVER_V2
+    REASON: COMPILER-GRADE SHIFTING
     STATUS: FINAL_STABILIZED_BUILD
 ]]
 
-local function _BOOT_VM()
-    --// THE ENCRYPTED PAYLOAD
-    local _STREAM = {161, 235, 99, 142, 204} 
-    local _KEY = 0x4B
-    local _PC = 1
-    
-    --// METHOD INDIRECTION (Hiding the UI calls)
-    local _V = {
-        ["L"] = "https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua",
-        ["T"] = "All Hub | All Game Script",
-        ["S"] = "by zayan",
-        ["M1"] = "CreateWindow",
-        ["M2"] = "AddTab"
+local _CPU = function()
+    --// LAYER 1: ENCRYPTED INSTRUCTION STREAM (The "Brain")
+    -- Format: {Opcode, Arg1, Arg2, JumpOffset}
+    local _BYTECODE = {
+        {0xAF, "L1", nil, 0}, -- LOAD_LIB
+        {0xBC, "W1", "T1", 0}, -- CREATE_WIN
+        {0xDE, "TABS", nil, 0}, -- MAP_TABS
+        {0xFF, nil, nil, 0}    -- TERMINATE
     }
 
-    local _REGS = {}
-    local _ACTIVE = true
+    --// LAYER 2: THE CONSTANT VAULT (Encoded)
+    local _CONST = {
+        ["L1"] = "\104\116\116\112\115\58\47\47\114\97\119\46\103\105\116\104\117\98\117\115\101\114\99\111\110\116\101\110\116\46\99\111\109\47\100\97\119\105\100\45\115\103\114\105\112\116\115\47\70\108\117\101\110\116\47\114\101\108\101\97\115\101\115\47\108\97\116\101\115\116\47\106\111\119\110\108\111\97\100\47\109\107\105\110\46\108\117\97",
+        ["T1"] = "All Hub | All Game Script",
+        ["S1"] = "by zayan",
+        ["U1"] = "https://raw.githubusercontent.com/kaisenlmao/loader/refs/heads/main/chiyo.lua"
+    }
 
-    --// THE INTERPRETER
-    while _ACTIVE do
-        local _BYTE = _STREAM[_PC]
-        if not _BYTE then break end
+    --// LAYER 3: VIRTUAL REGISTERS
+    local _REG = {}
+    local _PC = 1
+    local _RUN = true
 
-        -- Dynamic XOR Logic
-        local _OP = bit32.bxor(_BYTE, _KEY)
-        _KEY = bit32.band(_KEY + 1, 0xFF) -- Rotating key simple
-
-        -- INSTRUCTION HANDLERS
-        if _OP == 0xEA then -- [INIT_WINDOW]
-            _REGS[1] = loadstring(game:HttpGet(_V["L"]))()
-            _REGS[2] = _REGS[1][_V["M1"]](_REGS[1], {
-                Title = _V["T"], SubTitle = _V["S"],
+    --// LAYER 4: THE INTERPRETER (The CPU Loop)
+    local _OPS = {
+        [0xAF] = function(a) -- OP_LOAD
+            _REG["LIB"] = loadstring(game:HttpGet(_CONST[a]))()
+        end,
+        [0xBC] = function(a, b) -- OP_WINDOW
+            _REG["WIN"] = _REG["LIB"]:CreateWindow({
+                Title = _CONST[b], SubTitle = _CONST["S1"],
                 TabWidth = 160, Size = UDim2.fromOffset(580, 460),
                 Acrylic = false, Theme = "Dark"
             })
-        
-        elseif _OP == 0xB0 then -- [LOAD_TABS]
-            local _T = {"Main", "Sailor piece script", "Rivals", "Fisch", "Grow a Garden"}
-            _REGS[3] = {}
-            for _, name in pairs(_T) do
-                _REGS[3][name] = _REGS[2][_V["M2"]](_REGS[2], {Title = name, Icon = "circle"})
+        end,
+        [0xDE] = function() -- OP_INTERFACE
+            local names = {"Main", "Sailor piece script", "Rivals", "Fisch", "Grow a Garden"}
+            _REG["T"] = {}
+            for _, v in pairs(names) do
+                _REG["T"][v] = _REG["WIN"]:AddTab({Title = v, Icon = "circle"})
             end
             
-            -- Sailor Button (Chiyo)
-            _REGS[3]["Sailor piece script"]:AddButton({
+            -- Instruction for Button Injection
+            _REG["T"]["Sailor piece script"]:AddButton({
                 Title = "Chiyo Hub",
-                Callback = function()
-                    local u = "\104\116\116\112\115\58\47\47\114\97\119\46\103\105\116\104\117\98\117\115\101\114\99\111\110\116\101\110\116\46\99\111\109\47\107\97\105\115\101\110\108\109\97\111\47\108\111\97\100\101\114\47\114\101\102\115\47\104\101\97\100\115\47\109\97\105\110\47\99\104\105\121\111\46\108\117\97"
-                    loadstring(game:HttpGet(u))()
-                end
+                Callback = function() loadstring(game:HttpGet(_CONST["U1"]))() end
             })
 
-        elseif _OP == 0x2D then -- [BOOT_TOGGLE]
-            local _G = Instance.new("ScreenGui", game.CoreGui)
-            local _B = Instance.new("TextButton", _G)
-            _B.Size = UDim2.new(0, 50, 0, 50); _B.Position = UDim2.new(0.12, 0, 0.15, 0)
-            _B.Text = "HUB"; _B.Draggable = true
-            Instance.new("UICorner", _B).CornerRadius = UDim.new(0, 12)
-            _B.MouseButton1Click:Connect(function() _REGS[2]:Minimize() end)
+            -- Floating Toggle
+            local s, b = Instance.new("ScreenGui", game.CoreGui), Instance.new("TextButton")
+            b.Parent = s; b.Size = UDim2.new(0,50,0,50); b.Position = UDim2.new(0.1,0,0.1,0)
+            b.Text = "HUB"; b.Draggable = true
+            b.MouseButton1Click:Connect(function() _REG["WIN"]:Minimize() end)
+        end,
+        [0xFF] = function() _RUN = false end
+    }
+
+    --// EXECUTION ENGINE
+    while _RUN do
+        local inst = _BYTECODE[_PC]
+        if not inst then break end
+        
+        local op, a1, a2 = inst[1], inst[2], inst[3]
+        
+        -- Safe Execution Call
+        local success, err = pcall(function()
+            _OPS[op](a1, a2)
+        end)
+
+        if not success then
+            warn("VM_FAULT at PC " .. _PC .. ": " .. tostring(err))
+            break
         end
 
         _PC = _PC + 1
-        if _PC > 10 then break end
     end
 end
 
---// EXECUTE
+--// LAYER 5: DYNAMIC WRAPPER
 task.spawn(function()
-    pcall(_BOOT_VM)
+    local s, e = pcall(_CPU)
+    if not s then print("CRITICAL_VM_ERROR") end
 end)
