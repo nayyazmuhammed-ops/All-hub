@@ -1,4 +1,4 @@
-local url = "YOUR_SCRIPT_URL"
+local url = "https://raw.githubusercontent.com/nayyazmuhammed-ops/All-hub/main/vziwhbduk"
 
 local success, data = pcall(function()
     return game:HttpGet(url)
