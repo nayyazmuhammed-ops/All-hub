@@ -5,7 +5,7 @@ local Window = Fluent:CreateWindow({
     SubTitle = "by zayan",
     TabWidth = 160,
     Size = UDim2.fromOffset(580, 460),
-    Acrylic = false, -- Turned off blur to make it load 2x faster on mobile
+    Acrylic = false, 
     Theme = "Dark",
     MinimizeKey = Enum.KeyCode.LeftControl
 })
@@ -62,22 +62,18 @@ Tabs.Main:AddButton({
     Callback = function() loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))() end
 })
 
---// SAILOR PIECE
+--// SAILOR PIECE (UPDATED)
 Tabs.Sailor:AddButton({
     Title = "Chiyo Hub",
     Callback = function() loadstring(game:HttpGet('https://raw.githubusercontent.com/kaisenlmao/loader/refs/heads/main/chiyo.lua'))() end
-})
-Tabs.Sailor:AddButton({
-    Title = "Kite Hub",
-    Callback = function() loadstring(game:HttpGet('https://raw.githubusercontent.com/GoblinKun009/Script/refs/heads/main/KiteLoader'))() end
 })
 Tabs.Sailor:AddButton({
     Title = "Void Hub",
     Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/VoidDeveloper67/Void-Hub/refs/heads/main/VoidHub.lua"))() end
 })
 Tabs.Sailor:AddButton({
-    Title = "Express Hub",
-    Callback = function() loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/d8824b23a4d9f2e0d62b4e69397d206b.lua"))() end
+    Title = "Dupe Hub",
+    Callback = function() loadstring(game:HttpGet('https://raw.githubusercontent.com/xZPUHigh/Spectrum-Cloud/main/Loader.lua'))() end
 })
 
 --// RIVALS
