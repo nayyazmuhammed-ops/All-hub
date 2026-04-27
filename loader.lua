@@ -1,5 +1,5 @@
 --// SCRIPT LINK
-local SCRIPT_URL = "https://raw.githubusercontent.com/nayyazmuhammed-ops/All-hub/main/main.lua"
+local SCRIPT_URL = "https://raw.githubusercontent.com/nayyazmuhammed-ops/All-hub/main/vziwhbduk"
 
 --// KEY SYSTEM
 local KEYS = {
