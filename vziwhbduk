@@ -13,9 +13,9 @@ local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 task.wait(0.5)
 
 local Window = Rayfield:CreateWindow({
-    Name = "🎯 NoobFn Hub | RIVALS 🏆",
-    LoadingTitle = "🚀 Loading NoobFn...",
-    LoadingSubtitle = "by NoobFn",
+    Name = "🎯 Zayan Hub | RIVALS 🏆",
+    LoadingTitle = "🚀 Loading ZayanFn...",
+    LoadingSubtitle = "by ZayanFn",
     ConfigurationSaving = { Enabled = false }
 })
 
